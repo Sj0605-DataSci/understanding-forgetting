@@ -35,10 +35,9 @@ def load_gemma_model(model_name, max_context_length=1024):
     return model, tokenizer
 
 model, tokenizer = load_gemma_model(MODEL_PATH)
-model = model.cuda()
 
 def model_forward_batch(input_batch):
-    inputs = tokenizer(input_batch, return_tensors="pt", add_special_tokens=False).to("cuda:0")
+    inputs = tokenizer(input_batch, return_tensors="pt", add_special_tokens=False)
     output_tokens_batch = model.generate(inputs['input_ids'], temperature=0.0, max_new_tokens=10)
     return tokenizer.batch_decode(output_tokens_batch, skip_special_tokens=True)
 

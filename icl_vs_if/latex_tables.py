@@ -99,6 +99,3 @@ def get_average_latex_cell(fine_tune):
     ret += " \end{tabular} "
 
     return ret
-
-# Only the Gemma model is used, so FINE_TUNES and additional models are not applicable here.
-# If there is any specific tuning comparison within Gemma, you can add it here.
