@@ -10,7 +10,7 @@ PROMPT_TEMPLATE_LIST = ["input"]
 print('Generating datasets for English...')
 
 for (ICL_TASK, IF_TASK, kshot), INSTRUCTION_TEMPLATE, PROMPT_TEMPLATE in product(TASK_LIST, INSTRUCTION_TEMPLATE_LIST, PROMPT_TEMPLATE_LIST):    
-    with open("sentences/random_sentences_en.txt", 'r', encoding='utf-8') as f:
+    with open("Sj0605-DataSci/understanding-forgetting/icl_vs_if/sentences/random_sentences_en.txt", 'r', encoding='utf-8') as f:
         sentences = [line.strip('\n') for line in f]
 
     # Define ICL tasks
