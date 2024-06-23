@@ -25,13 +25,43 @@ concatenated_filehandle = "batch"
 
 concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
 
-print(f'Generated {concatenated_filehandle}')
+print(f'Generated {concatenated_filehandle}.csv')
 
-# Generate command for Gemma model only
-complete_command = ""
-for model in model_list:
-    command = f"python3 generate.py --model {model} --batch {concatenated_filehandle}"
-    complete_command += command + "\n"  # Each command on a new line
+# Generate Python script for Gemma model only
+complete_command = """
+from itertools import product
+import pandas as pd
 
-with open("/kaggle/working/understanding-forgetting/batch_generate.sh", "w") as f:
+def generate_batches():
+    task_list = [('capslock-math', 2), ('repeat-math', 2), ('capslock-startblank', 2), ('repeat-startblank', 2)]
+    lang_list = ['en']
+    model_list = ['gemma']
+    instr_list = ['instr']
+    prompt_template_list = ['input']
+
+    files = []
+    for (task, shot), lang, instr, prompt_template in product(task_list, lang_list, instr_list, prompt_template_list):
+        files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
+
+    concatenated_filehandle = "batch"
+
+    # Concatenate CSVs
+    location = "/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/"
+    combined_csv = pd.concat([pd.read_csv(location + f) for f in files], ignore_index=True)
+    combined_csv.to_csv(location + concatenated_filehandle + '.csv', index=False)
+
+    print(f'Generated {concatenated_filehandle}.csv')
+
+    # Process batches
+    for model in model_list:
+        print(f"Processing batch for model: {model}")
+        # Call your generate.py script here or integrate its functionality directly
+
+if __name__ == "__main__":
+    generate_batches()
+"""
+
+with open("/kaggle/working/understanding-forgetting/batch_generate.py", "w") as f:
     f.write(complete_command)
+
+print("Generated batch_generate.py")
