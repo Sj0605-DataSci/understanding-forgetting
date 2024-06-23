@@ -77,4 +77,4 @@ for (ICL_TASK, IF_TASK, kshot), INSTRUCTION_TEMPLATE, PROMPT_TEMPLATE in product
     data = [generate_sample(kshot=kshot) for _ in range(100)]
 
     df = pd.DataFrame.from_dict(data)
-    df.to_csv(f"in_csvs/{ICL_TASK}-{IF_TASK}-{INSTRUCTION_TEMPLATE}-{PROMPT_TEMPLATE}-en-{kshot}shot.csv")
+    df.to_csv(f"/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{ICL_TASK}-{IF_TASK}-{INSTRUCTION_TEMPLATE}-{PROMPT_TEMPLATE}-en-{kshot}shot.csv")

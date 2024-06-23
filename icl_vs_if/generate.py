@@ -14,8 +14,8 @@ parser.add_argument('--batch', type=str)
 args = parser.parse_args()
 assert args.model == "gemma"
 
-in_csv = f'in_csvs/{args.batch}.csv'
-out_csv = f'out_csvs/{args.batch}-{args.model}.csv'
+in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}.csv'
+out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}-{args.model}.csv'
 
 df = pd.read_csv(in_csv)
 

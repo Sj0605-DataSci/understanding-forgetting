@@ -9,7 +9,7 @@ lang_codes_to_name = {
     'en': 'English',
 }
 
-files, results = get_results_dict('out_csvs/batch-09-15-20-45-18-gemma.csv')
+files, results = get_results_dict('/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/batch-09-15-20-45-18-gemma.csv')
 
 # Only the Gemma model
 MODELS = ['Gemma']
