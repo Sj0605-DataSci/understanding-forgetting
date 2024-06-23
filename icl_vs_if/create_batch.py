@@ -21,7 +21,7 @@ for (task, shot), lang, instr, prompt_template in product(task_list, lang_list, 
     files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
 
 curr_time = datetime.now()
-formatted_time = curr_time.strftime("%m-%d-%H-%M-%S")
+formatted_time = curr_time.strftime("%Y-%m-%d-%H-%M-%S").replace('-0', '-')
 concatenated_filehandle = f"batch-{formatted_time}"
 
 concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
