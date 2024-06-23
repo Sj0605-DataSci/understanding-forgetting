@@ -24,7 +24,7 @@ curr_time = datetime.now()
 formatted_time = curr_time.strftime("%m-%d-%H-%M-%S")
 concatenated_filehandle = f"batch-{formatted_time}"
 
-concat_csvs("in_csvs/", files, concatenated_filehandle)
+concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
 
 print(f'Generated {concatenated_filehandle}')
 
