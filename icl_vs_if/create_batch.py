@@ -34,6 +34,6 @@ for model in model_list:
     command = f"python3 generate.py --model {model} --batch {concatenated_filehandle}"
     complete_command += command + " ; "
 
-with open("batch_generate.sh", "w") as f:
+with open("/kaggle/working/understanding-forgetting/batch_generate.sh", "w") as f:
     f.write(complete_command)
     f.write("\n")
