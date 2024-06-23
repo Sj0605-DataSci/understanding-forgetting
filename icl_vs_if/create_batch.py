@@ -21,7 +21,7 @@ for (task, shot), lang, instr, prompt_template in product(task_list, lang_list, 
     files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
 
 curr_time = datetime.now()
-formatted_time = curr_time.strftime("%Y-%m-%d-%H-%M-%S").replace('-0', '-')
+formatted_time = curr_time.strftime("%Y-%m-%d-%H-%M-%S")
 concatenated_filehandle = f"batch-{formatted_time}"
 
 concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
@@ -32,8 +32,7 @@ print(f'Generated {concatenated_filehandle}')
 complete_command = ""
 for model in model_list:
     command = f"python3 generate.py --model {model} --batch {concatenated_filehandle}"
-    complete_command += command + " ; "
+    complete_command += command + "\n"  # Each command on a new line
 
 with open("/kaggle/working/understanding-forgetting/batch_generate.sh", "w") as f:
     f.write(complete_command)
-    f.write("\n")
