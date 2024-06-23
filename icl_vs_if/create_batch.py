@@ -31,7 +31,7 @@ print(f'Generated {concatenated_filehandle}.csv')
 complete_command = """
 import subprocess
 
-subprocess.run(["python3", "/kaggle/working/understanding-forgetting/generate.py", "--model", "gemma", "--batch", "batch"])
+subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "gemma", "--batch", "batch"])
 """
 
 with open("/kaggle/working/understanding-forgetting/batch_generate.py", "w") as f:
