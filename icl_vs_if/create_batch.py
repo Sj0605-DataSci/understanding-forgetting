@@ -6,14 +6,15 @@ def concat_csvs(location, filenames, resulting_filename):
     combined_csv = pd.concat([pd.read_csv(location + f) for f in filenames], ignore_index=True)
     combined_csv.to_csv(location + resulting_filename + '.csv', index=False)
 
+# Only English language and Gemma model
 task_list = [('capslock-math', 2), ('repeat-math', 2), ('capslock-startblank', 2), ('repeat-startblank', 2)]
-lang_list = ['en', 'fr', 'es', 'nl', 'hu', 'ls', 'pl']
-model_list = ['llama', 'alpaca', 'vicuna-7b', 'opt-1.3b', 'opt-iml-max-1.3b']
+lang_list = ['en']
+model_list = ['gemma']
 instr_list = ['instr']
 prompt_template_list = ['input']
 
 print('Generate batch of datasets for generate.py...')
-print('  Models:', model_list)
+print('  Models: Gemma')
 
 files = []
 for (task, shot), lang, instr, prompt_template in product(task_list, lang_list, instr_list, prompt_template_list):
@@ -27,9 +28,10 @@ concat_csvs("in_csvs/", files, concatenated_filehandle)
 
 print(f'Generated {concatenated_filehandle}')
 
+# Generate command for Gemma model only
 complete_command = ""
 for model in model_list:
-    command=f"python3 generate.py --model {model} --batch {concatenated_filehandle}"
+    command = f"python3 generate.py --model {model} --batch {concatenated_filehandle}"
     complete_command += command + " ; "
 
 with open("batch_generate.sh", "w") as f:
