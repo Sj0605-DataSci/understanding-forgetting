@@ -4,32 +4,27 @@ import sys
 
 sys.stdout = open('latex_tables.txt', 'w')
 
+# Only English language
 lang_codes_to_name = {
-    'en' : 'English',
-    'fr' : 'French',
-    'es' : 'Spanish',
-    'nl' : 'Dutch',
-    'hu' : 'Hungarian',
-    'ls' : 'Leetspeak',
-    'pl' : 'Pig Latin',
+    'en': 'English',
 }
 
-files, results = get_results_dict('out_csvs/batch-09-15-20-45-18-{model}.csv')
+files, results = get_results_dict('out_csvs/batch-09-15-20-45-18-gemma.csv')
 
-MODELS = ['LLaMa', 'Alpaca', 'Vicuna', 'OPT', 'OPT-IML']
+# Only the Gemma model
+MODELS = ['Gemma']
 TASK_SHOTS = [('capslock-math', 2), ('repeat-math', 2), 
               ('capslock-startblank', 2), ('repeat-startblank', 2)]
 TEMPLATES = ['input']
-LANGS = ['en', 'fr', 'es', 'nl', 'hu', 'ls', 'pl']
+LANGS = ['en']
 INSTR = 'instr'
-FINE_TUNES = [['LLaMa', 'Alpaca'], ['LLaMa', 'Vicuna'], ['OPT', 'OPT-IML']]
 
 def format_mean_std(mean, std):
     return f" {mean:0.2f} \\% "
 
 def get_mean_std(task, instr, templates, lang, shot, model):
     good_files = [f'{task}-{instr}-{template}-{lang}-{shot}shot' for template in templates]
-    vals = list(map(lambda pair: pair[1], list(filter(lambda pair : pair[0] in good_files, list(zip(files, results[model]))))))
+    vals = list(map(lambda pair: pair[1], list(filter(lambda pair: pair[0] in good_files, list(zip(files, results[model]))))))
     mean, std = np.mean(vals), np.std(vals)
     return mean, std
 
@@ -72,8 +67,8 @@ def get_mean_by_lang_model(lang, model):
     return np.mean([get_mean_std(task, INSTR, TEMPLATES, lang, shot, model)[0] for (task, shot) in TASK_SHOTS])
 
 average_results = {
-    lang : {
-        model : get_mean_by_lang_model(lang, model)
+    lang: {
+        model: get_mean_by_lang_model(lang, model)
         for model in MODELS
     } for lang in LANGS
 }
@@ -105,10 +100,5 @@ def get_average_latex_cell(fine_tune):
 
     return ret
 
-for i, fine_tune in enumerate(FINE_TUNES):
-    print('\\midrule')
-    print(fine_tune[0])
-    print('& ' + fine_tune[1])
-    print(get_langs())
-    print(get_average_latex_cell(fine_tune))
-    print('\\\\')
+# Only the Gemma model is used, so FINE_TUNES and additional models are not applicable here.
+# If there is any specific tuning comparison within Gemma, you can add it here.
