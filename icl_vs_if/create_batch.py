@@ -32,6 +32,7 @@ for model in model_list:
     complete_command = f"""
 import subprocess
 
+# Unload previous model if it exists
 subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "{concatenated_filehandle}"])
 """
 
