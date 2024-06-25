@@ -25,7 +25,17 @@ out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.ba
 
 df = pd.read_csv(in_csv)
 
+model = None
+tokenizer = None
+
 def load_model(model_name, max_context_length=1024):
+    global model, tokenizer
+    # Unload previous model and tokenizer
+    if model is not None:
+        del model
+    if tokenizer is not None:
+        del tokenizer
+    
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         device_map='auto',
@@ -36,11 +46,7 @@ def load_model(model_name, max_context_length=1024):
     tokenizer = AutoTokenizer.from_pretrained(
         model_name,
         device_map='auto',
-    )    
-
-    return model, tokenizer
-
-model, tokenizer = load_model(MODEL_PATHS[args.model])
+    )
 
 def model_forward_batch(input_batch):
     inputs = tokenizer(input_batch, return_tensors="pt", add_special_tokens=False)
@@ -62,3 +68,7 @@ for i in tqdm(range(0, num_samples, BATCH_SIZE)):
 
 df['model_outputs'] = model_outputs
 df.to_csv(out_csv)
+
+# Unload model and tokenizer after use
+del model
+del tokenizer
