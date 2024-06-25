@@ -17,10 +17,12 @@ parser.add_argument('--batch', type=str, required=True)
 parser.add_argument('--lang', type=str, required=True)
 args = parser.parse_args()
 
-assert args.model in MODEL_PATHS
+# Ensure the model argument is valid
+assert args.model in MODEL_PATHS, f"Invalid model name: {args.model}"
 
-in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}.csv'
-out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}_{args.model}.csv'
+# Construct input and output CSV paths
+in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}.csv'  # Adjusted to use args.batch directly
+out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}_{args.model}_{args.lang}.csv'
 
 df = pd.read_csv(in_csv)
 

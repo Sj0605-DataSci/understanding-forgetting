@@ -1,6 +1,8 @@
 from itertools import product
 import pandas as pd
+import subprocess
 
+# Define function to concatenate CSV files
 def concat_csvs(location, filenames, resulting_filename):
     combined_csv = pd.concat([pd.read_csv(location + f) for f in filenames], ignore_index=True)
     combined_csv.to_csv(location + resulting_filename + '.csv', index=False)
@@ -24,6 +26,7 @@ for model in model_list:
         # Use a generic name for the batch file
         concatenated_filehandle = f"batch_{model}_{lang}"  # Adjusted the file naming pattern
 
+        # Concatenate CSV files
         concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
 
         print(f'Generated {concatenated_filehandle}.csv')
@@ -32,11 +35,14 @@ for model in model_list:
         complete_command = f"""
 import subprocess
 
-# Unload previous model if it exists
-subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "batch_{model}_{lang}", "--lang", "{lang}"])
+# Execute generate.py with appropriate arguments
+subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "{concatenated_filehandle}", "--lang", "{lang}"])
 """
 
+        # Define script filename
         script_filename = f"/kaggle/working/understanding-forgetting/batch_generate_{model}_{lang}.py"
+
+        # Write complete_command to script file
         with open(script_filename, "w") as f:
             f.write(complete_command)
 
