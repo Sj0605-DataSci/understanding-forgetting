@@ -2,7 +2,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from tqdm import tqdm
 import argparse
 import pandas as pd
-import bitsandbytes as bnb
 
 # Define the model paths
 MODEL_PATHS = {
@@ -20,8 +19,8 @@ args = parser.parse_args()
 
 assert args.model in MODEL_PATHS
 
-in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}-{args.lang}.csv'
-out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}-{args.model}-{args.lang}.csv'
+in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}_{args.lang}.csv'
+out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}_{args.model}_{args.lang}.csv'
 
 df = pd.read_csv(in_csv)
 
@@ -37,15 +36,15 @@ def load_model(model_name, max_context_length=1024):
         del tokenizer
     
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map='auto',
+        MODEL_PATHS[model_name],
+        device='cuda' if torch.cuda.is_available() else 'cpu',  # Adjust device based on availability
         load_in_8bit=True,  # Enable quantization with bitsandbytes
         max_length=max_context_length,
     )
 
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name,
-        device_map='auto',
+        MODEL_PATHS[model_name],
+        device='cuda' if torch.cuda.is_available() else 'cpu',
     )
 
 def model_forward_batch(input_batch):
@@ -67,7 +66,7 @@ for i in tqdm(range(0, num_samples, BATCH_SIZE)):
         model_outputs.append(output_batch[j])
 
 df['model_outputs'] = model_outputs
-df.to_csv(out_csv)
+df.to_csv(out_csv, index=False)
 
 # Unload model and tokenizer after use
 del model
