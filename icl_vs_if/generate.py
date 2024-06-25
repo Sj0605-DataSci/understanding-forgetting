@@ -4,22 +4,28 @@ import argparse
 import pandas as pd
 import bitsandbytes as bnb
 
-MODEL_PATH = "google/gemma-7b"
+# Define the model paths
+MODEL_PATHS = {
+    "gemma": "google/gemma-7b",
+    "gemma-tuned": "weqweasdas/RM-Gemma-7B"
+}
 
 BATCH_SIZE = 1
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model', type=str)
-parser.add_argument('--batch', type=str)
+parser.add_argument('--model', type=str, required=True)
+parser.add_argument('--batch', type=str, required=True)
+parser.add_argument('--lang', type=str, required=True)
 args = parser.parse_args()
-assert args.model == "gemma"
 
-in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}.csv'
-out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}-{args.model}.csv'
+assert args.model in MODEL_PATHS
+
+in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}-{args.lang}.csv'
+out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}-{args.model}-{args.lang}.csv'
 
 df = pd.read_csv(in_csv)
 
-def load_gemma_model(model_name, max_context_length=1024):
+def load_model(model_name, max_context_length=1024):
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         device_map='auto',
@@ -34,7 +40,7 @@ def load_gemma_model(model_name, max_context_length=1024):
 
     return model, tokenizer
 
-model, tokenizer = load_gemma_model(MODEL_PATH)
+model, tokenizer = load_model(MODEL_PATHS[args.model])
 
 def model_forward_batch(input_batch):
     inputs = tokenizer(input_batch, return_tensors="pt", add_special_tokens=False)
