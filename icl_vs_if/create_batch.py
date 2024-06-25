@@ -17,27 +17,28 @@ print('Generate batch of datasets for generate.py...')
 print('  Models:', model_list)
 
 for model in model_list:
-    files = []
-    for (task, shot), lang, instr, prompt_template in product(task_list, lang_list, instr_list, prompt_template_list):
-        files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
+    for lang in lang_list:
+        files = []
+        for (task, shot), instr, prompt_template in product(task_list, instr_list, prompt_template_list):
+            files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
 
-    # Use a generic name for the batch file
-    concatenated_filehandle = f"batch_{model}"
+        # Use a generic name for the batch file
+        concatenated_filehandle = f"batch_{model}_{lang}"
 
-    concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
+        concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
 
-    print(f'Generated {concatenated_filehandle}.csv')
+        print(f'Generated {concatenated_filehandle}.csv')
 
-    # Generate Python script for the current model
-    complete_command = f"""
+        # Generate Python script for the current model and language
+        complete_command = f"""
 import subprocess
 
 # Unload previous model if it exists
-subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "{concatenated_filehandle}"])
+subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "{concatenated_filehandle}", "--lang", "{lang}"])
 """
 
-    script_filename = f"/kaggle/working/understanding-forgetting/batch_generate_{model}.py"
-    with open(script_filename, "w") as f:
-        f.write(complete_command)
+        script_filename = f"/kaggle/working/understanding-forgetting/batch_generate_{model}_{lang}.py"
+        with open(script_filename, "w") as f:
+            f.write(complete_command)
 
-    print(f"Generated {script_filename}")
+        print(f"Generated {script_filename}")
