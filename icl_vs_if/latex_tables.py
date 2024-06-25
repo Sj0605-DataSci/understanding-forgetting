@@ -9,9 +9,9 @@ def get_results_dict(base_csv_path):
     CHUNK_SIZE = 100
 
     MODEL_LATEX_MAPPING = {
-        'Gemma' : 'Gemma',
-        'Gemma-tuned' : 'RM-Gemma-7B'
-    }
+        'gemma': 'Gemma',
+        'gemma-tuned': 'Gemma-Tuned',
+     }
 
     dfs = {MODEL_LATEX_MAPPING[model]: pd.read_csv(base_csv_path.format(model=model)) for model in MODELS}
 
