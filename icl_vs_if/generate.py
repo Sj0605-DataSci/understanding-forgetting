@@ -19,8 +19,8 @@ args = parser.parse_args()
 
 assert args.model in MODEL_PATHS
 
-in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}_{args.lang}.csv'
-out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}_{args.model}_{args.lang}.csv'
+in_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/{args.batch}.csv'
+out_csv = f'/kaggle/working/understanding-forgetting/icl_vs_if/out_csvs/{args.batch}_{args.model}.csv'
 
 df = pd.read_csv(in_csv)
 
