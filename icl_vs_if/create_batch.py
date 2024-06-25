@@ -33,7 +33,7 @@ for model in model_list:
 import subprocess
 
 # Unload previous model if it exists
-subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "{concatenated_filehandle}", "--lang", "{lang}"])
+subprocess.run(["python3", "/kaggle/working/understanding-forgetting/icl_vs_if/generate.py", "--model", "{model}", "--batch", "batch_{model}_{lang}", "--lang", "{lang}"])
 """
 
         script_filename = f"/kaggle/working/understanding-forgetting/batch_generate_{model}_{lang}.py"
