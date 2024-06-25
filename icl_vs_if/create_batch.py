@@ -23,7 +23,7 @@ for model in model_list:
             files.append(f"{task}-{instr}-{prompt_template}-{lang}-{shot}shot.csv")
 
         # Use a generic name for the batch file
-        concatenated_filehandle = f"batch_{model}_{lang}"
+        concatenated_filehandle = f"batch_{model}_{lang}"  # Adjusted the file naming pattern
 
         concat_csvs("/kaggle/working/understanding-forgetting/icl_vs_if/in_csvs/", files, concatenated_filehandle)
 
